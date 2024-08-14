@@ -1,0 +1,52 @@
+clc; clear all;
+
+% 读取真实数据
+load('./0HP/12k_Drive_End_OR007@6_0_130.mat');
+true_data = DE(1:41929);
+
+% 仿真参数和初始条件
+Fr_true = 80; % 真实的外部激励力
+wc_sim = 2 * 200 * pi;
+C_sim = 100;
+m_sim = 0.1;
+tspan_sim = [0 30];
+x0_sim = [1e-3; 0; 1e-3; 0];
+
+% 粒子滤波参数
+num_particles = 1000;
+
+% 粒子滤波估计物理参数
+[x_est, P_est] = particleFilterParameterTuning(true_data, wc_sim, C_sim, m_sim, num_particles);
+
+% 绘制仿真和估计结果
+t_sim_est = linspace(t_sim(1), t_sim(end), size(x_est, 1)); % 创建等间距的时间向量，使其长度与估计结果一致
+
+figure;
+subplot(2, 1, 1);
+plot(t_sim, x_sim(:, 4), 'b', 'LineWidth', 1.5, 'DisplayName', 'Simulation');
+hold on;
+plot(t_sim, x_est(:, 4), 'r--', 'LineWidth', 1.5, 'DisplayName', 'Estimation');
+title('y方向速度规律');
+xlabel('时间');
+ylabel('幅值');
+legend('Location', 'Best');
+grid on;
+
+subplot(2, 1, 2);
+plot(t_sim, abs(fft(x_sim(:, 4))), 'b', 'LineWidth', 1.5, 'DisplayName', 'Simulation');
+hold on;
+plot(t_sim, abs(fft(x_est(:, 4))), 'r--', 'LineWidth', 1.5, 'DisplayName', 'Estimation');
+xlabel('频率');
+ylabel('幅值');
+legend('Location', 'Best');
+grid on;
+
+
+
+
+
+
+
+
+
+

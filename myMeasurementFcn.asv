@@ -1,0 +1,6 @@
+function z_pred = myMeasurementFcn(x)
+    % This is a simple measurement function that predicts the measurement based on the state x.
+    % You might need to adjust this based on the actual form of your measurement function.
+    z_pred = f(x(1), x(2), x(3));  % Assuming the measurement is a function of x1, x2, and x3.
+end
+
